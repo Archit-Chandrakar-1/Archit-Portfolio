@@ -181,9 +181,15 @@ document.querySelector('#app').innerHTML = `
   </nav>
   
   <section class="hero" id="home">
-    <video autoplay loop muted playsinline>
-      <source src="/Videos/Archit-portfolio-video.mp4" type="video/mp4">
-    </video>
+    <iframe 
+      src="https://player.cloudinary.com/embed/?cloud_name=daozx86oq&public_id=bdcf8jiwc6qbp88smoya&player[autoplay]=true&player[autoplayMode]=on-scroll&player[muted]=true&player[loop]=true&player[controls]=false"
+      width="100%" 
+      height="100%" 
+      style="border: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;"
+      allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+      allowfullscreen
+      frameborder="0">
+    </iframe>
     <div class="hero-content">
       <h1>Hello I'm,<br>Archit Chandrakar</h1>
       <p>Webdesigner & Entrepreneur</p>

@@ -63,7 +63,7 @@ nav {
   overflow: hidden;
 }
 
-.hero video {
+.hero iframe {
   position: absolute;
   top: 0;
   left: 0;
