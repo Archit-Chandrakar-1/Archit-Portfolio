@@ -1,2 +1,0 @@
-# Archit-Portfolio
-My Portfolio
