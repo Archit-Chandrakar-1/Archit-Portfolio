@@ -19,7 +19,7 @@ export default function ContactForm() {
           Contact <span className="text-gray-700">us</span>
         </h1>
 
-        <form action="https://formspree.io/f/xkgqbdvq">
+        <form action="https://formspree.io/f/xkgqbdvq" method="POST">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input
               type="text"
