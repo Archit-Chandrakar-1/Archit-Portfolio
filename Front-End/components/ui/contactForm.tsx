@@ -19,7 +19,7 @@ export default function ContactForm() {
           Contact <span className="text-gray-700">us</span>
         </h1>
 
-        <form action="https://architchandrakar.app.n8n.cloud/webhook-test/26b69a06-dd3a-4353-a621-508e93d0093c" method="POST" className="mt-10 space-y-5">
+        <form action="https://formspree.io/f/xkgqbdvq">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input
               type="text"
