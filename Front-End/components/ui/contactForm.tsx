@@ -25,7 +25,7 @@ export default function ContactForm() {
               type="text"
               name="name"
               placeholder="Full Name*"
-              className="border border-gray-300 bg-transparent px-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-[#e24b3c]"
+              className="border border-gray-300 bg-transparent px-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-[#e24b3c] text-black"
               required
             />
             <label>
@@ -33,7 +33,7 @@ export default function ContactForm() {
               type="email"
               name="email"
               placeholder="Email ID*"
-              className="border border-gray-300 bg-transparent px-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-[#e24b3c]"
+              className="border border-gray-300 bg-transparent px-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-[#e24b3c] text-black"
               required
             />
             </label>
@@ -46,7 +46,7 @@ export default function ContactForm() {
               type="tel"
               name="phone"
               placeholder="Phone number*"
-              className="border border-gray-300 bg-transparent px-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-[#e24b3c]"
+              className="border border-gray-300 bg-transparent px-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-[#e24b3c] text-black"
               required
             />
             </label>
@@ -57,7 +57,7 @@ export default function ContactForm() {
             name="message"
             placeholder="Message*"
             rows={4}
-            className="border border-gray-300 bg-transparent px-4 py-3 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-[#e24b3c]"
+            className="border border-gray-300 bg-transparent px-4 py-3 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-[#e24b3c] text-black"
             required
           />
           </label>
