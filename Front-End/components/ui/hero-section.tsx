@@ -36,10 +36,22 @@ export default function HeroSection() {
 
               {/* Main Heading and paragraph */}
               <div className="space-y-4">
-                <h1 className="text-6xl lg:text-8xl font-bold leading-none">
-                  Archit
+                {/* Applying text-stroke for an outlined effect.
+                  This will require custom CSS in your global stylesheet or inline style.
+                  For a quick demonstration, I'm using inline style and a fallback font.
+                  The background color of the section should be considered when setting stroke color.
+                */}
+                <h1 className="text-6xl lg:text-8xl font-black tracking-wider leading-none"
+                    style={{
+                        WebkitTextStroke: isDark ? '2px white' : '2px black', // Outline color based on theme
+                        WebkitTextFillColor: 'transparent', // Make the text fill transparent
+                        // Fallback font that is heavy and blocky for the outline effect
+                        fontFamily: 'Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif', 
+                    }}
+                >
+                  ARCHIT
                   <br />
-                  Chandrakar
+                  CHANDRAKAR
                 </h1>
                 <p className={`text-lg ${subTextClass} max-w-md`}>
                   Hello, my name is Archit Chandrakar, nice to meet you I would like to welcome you with my personal portfolio.

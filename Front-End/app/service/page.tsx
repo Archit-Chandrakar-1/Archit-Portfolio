@@ -1,43 +1,106 @@
+"use client";
+"use client";
 import Navbar from '@/components/ui/navbar';
+import { ListItem } from '@/components/ui/ListItem'; // Import the new ListItem component
+
+// Define a type for a Service item
+type ServiceItem = {
+  title: string;
+  description: string;
+};
+
+// The comprehensive list of services (Updated to use title case for consistency with the design)
+const services: ServiceItem[] = [
+  {
+    title: "SOFTWARE DEVELOPMENT",
+    description: "Comprehensive Softwares according to your requirement.",
+  },
+  {
+    title: "WEBSITE CREATION",
+    description: "Creating high-performance, modern, and responsive websites using cutting-edge technologies.",
+  },
+  {
+    title: "PRODUCT & PROJECT MANAGEMENT",
+    description: "Leading and delivering successful digital products and projects from concept to launch.",
+  },
+  {
+    title: "CUSTOM - HRM BUILD'S",
+    description: "Tailored enterprise solutions (HRM, CRM, ERP) to streamline internal and external operations efficiently.",
+  },
+  {
+    title: "CUSTOM - CRM BUILD'S",
+    description: "Tailored enterprise solutions (HRM, CRM, ERP) to streamline internal and external operations efficiently.",
+  },
+  {
+    title: "CUSTOM - ERP BUILD'S",
+    description: "Tailored enterprise solutions (HRM, CRM, ERP) to streamline internal and external operations efficiently.",
+  },
+  {
+    title: "FINTECH & PAYMENT INTEGRATIONS",
+    description: "Targeted advertising campaigns on Facebook and Instagram for maximum return on investment (ROI).",
+  },
+  {
+    title: "META ADVERTISMENT MASTER",
+    description: "Targeted advertising campaigns on Facebook,Google,Whatsapp,Youtube and Instagram for maximum return on investment (ROI).",
+  },
+  {
+    title: "DESGIN MASTERS",
+    description: "Professional graphic design, branding, and visual identity creation to ensure a consistent brand image.",
+  },
+  {
+    title: "BLOGGING,CONTENT & GOOGLE ADSENSE",
+    description: "Content strategy, blog setup, and monetization through Google AdSense for passive revenue.",
+  }, 
+  {
+    title: "GOOGLE CONSOLE & ANALYTICS",
+    description: "In-depth traffic analysis and search performance monitoring for actionable insights.",
+  },
+  {
+    title: "SEO & SOCIAL MEDIA OPTIMIZATION",
+    description: "Optimizing profiles and content to improve visibility and organic engagement across social channels.",
+  },
+  {
+    title: "AI AGENTS & AUTOMATION",
+    description: "Designing high-converting landing pages and setting up marketing automation workflows for lead nurturing.",
+  },
+  {
+    title: "MARKETING TACTICS",
+    description: "Building, segmenting, and automating email campaigns for better customer retention and sales.",
+  },  
+  {
+    title: "INTERNATIONAL FREELANCING",
+    description: "Guidance and strategies for securing and excelling in international remote work opportunities.",
+  },
+  
+];
+
 
 export default function Service() {
   return (
-    <main className="min-h-screen bg-black">
-      <Navbar />
-      <div className="pt-24 px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="text-center space-y-8">
-          <h1 className="text-5xl lg:text-6xl font-bold text-white">
-            My Services
+    // Switched to white background to match the requested design
+    <main className="min-h-screen bg-white text-black"> 
+      {/* Assuming Navbar is styled to fit on a light background, or is fixed/sticky */}
+      <Navbar /> 
+      
+      <div className="pt-24 pb-16 max-w-7xl mx-auto">
+        {/* Title Section (Adjusted for white background) */}
+        <div className="text-center space-y-4 mb-16 px-6 lg:px-8">
+          <h1 className="text-5xl lg:text-6xl font-bold text-black">
+            My Professional Services
           </h1>
-          <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-            Professional services tailored to bring your digital vision to life
+          <p className="text-xl text-gray-700 max-w-4xl mx-auto">
+            A comprehensive suite of digital and development services tailored to bring your vision to life.
           </p>
-          
-          <div className="grid md:grid-cols-3 gap-8 mt-16">
-            {[
-              {
-                title: "Web Development",
-                description: "Custom websites and web applications built with modern technologies",
-                icon: "🌐"
-              },
-              {
-                title: "UI/UX Design",
-                description: "User-centered design solutions that create meaningful experiences",
-                icon: "🎨"
-              },
-              {
-                title: "Digital Strategy",
-                description: "Strategic planning and consultation for digital transformation",
-                icon: "💡"
-              }
-            ].map((service, index) => (
-              <div key={index} className="bg-gray-900 border border-gray-800 rounded-2xl p-8 hover:border-green-500 transition-all duration-300">
-                <div className="text-4xl mb-4">{service.icon}</div>
-                <h3 className="text-xl font-semibold text-white mb-4">{service.title}</h3>
-                <p className="text-gray-400">{service.description}</p>
-              </div>
+        </div>
+        
+        {/* Services List - uses the new component */}
+        <div className="w-full">
+            {services.map((service, index) => (
+                <ListItem key={index} service={service} index={index} />
             ))}
-          </div>
+            
+            {/* Final bottom border to close the list container */}
+            <div className="border-t border-black w-full" /> 
         </div>
       </div>
     </main>
