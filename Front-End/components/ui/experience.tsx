@@ -1,200 +1,167 @@
 "use client";
 
-import Image from "next/image";
-import { useState, useEffect } from "react";
+import React from "react";
 
-// --- Carousel Images Array (replace with your URLs) ---
-const carouselImages = [
-  
-  "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1200",
-  "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?w=1200"
-];
-
-// --- Experiences Array (your existing experience objects) ---
+// --- Experience Data ---
 const experiences = [
   {
-    name: "The Jurni",
-    logo: "https://res.cloudinary.com/daozx86oq/image/upload/v1755932717/WhatsApp_Image_2025-08-23_at_11.53.28_wa0hbz.jpg",
-    role: "Campus Ambassador",
-    date: "Dec 2020 - Jan 2021",
-    url: "https://thejurni.io",
-    description: [
-      "Helped promote The Jurni platform on campus through events, campaigns, and online engagement.",
-      "Organized student meetups and awareness sessions.",
-      "Gathered feedback to improve student onboarding.",
+    company: "MATS University",
+    role: "Software Developer Project Lead",
+    date: "Aug 2025 - Present",
+    location: "Raipur, India",
+    description: "Leading technology decisions and system architecture for the university's Educational ERP, transitioning from outsourced solutions to internal development.",
+    highlights: [
+      "Defined technology stack and system architecture for Educational ERP",
+      "Led migration of main website from PHP to React.js + Express.js",
+      "Designed and launched matsodl.com - Distance Education portal"
     ],
   },
   {
-    name: "Groweven",
-    logo: "https://res.cloudinary.com/daozx86oq/image/upload/v1755322887/Screenshot_2025-08-16_at_11.03.07_AM_odikgb.png",
+    company: "Gharkasathi Innoventures",
+    role: "Software Development Project Manager",
+    date: "Sep 2024 - July 2025",
+    location: "Raipur, India",
+    description: "Oversaw the full lifecycle of software development projects, managing cross-functional teams and ensuring timely delivery of client solutions.",
+    highlights: [
+      "Led technical teams in site/app development",
+      "Integrated APIs and payment gateways",
+      "Managed project milestones and client deliverables"
+    ],
+  },
+  {
+    company: "Groweven",
     role: "Web Developer Intern",
     date: "July 2023 - Oct 2023",
-    url: "https://www.groweven.com",
-    description: [
-      "Built and maintained responsive websites with a team.",
-      "Optimized site performance for SEO and accessibility.",
-      "Helped implement new features in client dashboards.",
+    location: "Remote",
+    description: "Collaborated with senior developers to build and maintain responsive websites, focusing on performance optimization and SEO.",
+    highlights: [
+      "Built and maintained responsive websites with a team",
+      "Optimized site performance for SEO and accessibility",
+      "Implemented new features in client dashboards"
     ],
   },
   {
-    name: "GKS  Pvt Ltd.",
-    logo: "https://res.cloudinary.com/daozx86oq/image/upload/v1755933178/Screenshot_2025-08-23_at_12.41.42_PM_sdwcsz.png",
-    role: "IT Project Manager/Developer",
-    date: "Sep 2024 - July 2025",
-    url: "https://www.gharkasathi.com",
-    description: [
-      "Led technical teams in site/app development.",
-      "Oversaw project milestones and deliverables.",
-      "Integrated APIs and payment gateways.",
-    ],
-  },
-  {
-    name: "MATS University",
-    logo: "https://res.cloudinary.com/daozx86oq/image/upload/v1755933603/Screenshot_2025-08-23_at_12.48.18_PM_t68byq.png",
-    role: "Tech Lead/Developer",
-    date: "Aug 2025 - Present",
-    url: "https://matsuniversity.ac.in/",
-    description: [
-      "Managing the development of education platforms.",
-      "Leading a multi-disciplinary tech team.",
-      "Developing automation tools for campus admin.",
+    company: "The Jurni",
+    role: "Campus Ambassador",
+    date: "Dec 2020 - Jan 2021",
+    location: "Remote",
+    description: "Promoted the platform through strategic campus events and digital campaigns, gathering critical user feedback for product improvement.",
+    highlights: [
+      "Organized student meetups and awareness sessions",
+      "Helped promote The Jurni platform on campus",
+      "Gathered feedback to improve student onboarding"
     ],
   },
 ];
 
 export default function ExperienceSection() {
-  const [activeIdx, setActiveIdx] = useState<number | null>(null);
-  const [carouselIdx, setCarouselIdx] = useState(0);
-
-  // --- Automatically change background image every 5 seconds ---
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCarouselIdx(prev => (prev + 1) % carouselImages.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
-
   return (
-    <section className="bg-gray-50 min-h-screen flex flex-col items-center justify-center px-4 py-12 relative overflow-hidden">
-      {/* Carousel Background */}
-      <div className="absolute inset-0 w-full h-full pointer-events-none z-0 transition-all duration-700">
-        <Image
-          src={carouselImages[carouselIdx]}
-          alt="Background carousel"
-          fill
-          style={{ objectFit: "cover", opacity: 0.5 }}
-          sizes="100vw"
-          priority
-        />
+    <section className="bg-black min-h-screen py-20 px-4 md:px-8 relative overflow-hidden" id="experience">
+      
+      {/* Header */}
+      <div className="max-w-4xl mx-auto mb-16 relative z-10">
+        <h3 className="text-orange-500 text-sm font-bold tracking-widest uppercase mb-2">
+          Career Path
+        </h3>
+        <h2 className="text-5xl font-bold text-white mb-6">
+          Work <br /> <span className="text-neutral-500">Experience</span>
+        </h2>
       </div>
 
-      {/* Section Content */}
-      <div className="relative z-10 w-full flex flex-col items-center">
-        {/* Header */}
-        <div className="max-w-3xl w-full text-center mb-8">
-          <h2 className="text-4xl font-bold mb-2 text-green-900">Experience Highlights</h2>
-          <p className="text-lg text-green-900">
-            Professional journey, skills, roles, and achievements.
-          </p>
-        </div>
+      {/* Timeline Container */}
+      <div className="max-w-6xl mx-auto relative">
+        
+        {/* Vertical Center Line (Hidden on mobile, visible on lg) */}
+        <div className="hidden lg:block absolute left-1/2 transform -translate-x-1/2 w-px h-full bg-neutral-800" />
+        
+        {/* Mobile Left Line */}
+        <div className="lg:hidden absolute left-8 w-px h-full bg-neutral-800" />
 
-        {/* Experience Cards */}
-        <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {experiences.map((exp, idx) => (
-            <div key={exp.name} className="relative flex items-center justify-center min-h-[260px]">
-              <div
-                className="relative z-10 rounded-2xl shadow-lg bg-white transition-colors duration-300 shadow-gray-200 flex flex-col p-6 w-full hover:bg-green-900 group"
-              >
-                <div className="flex items-center mb-4">
-                  <Image
-                    src={exp.logo}
-                    alt={`${exp.name} logo`}
-                    width={48}
-                    height={48}
-                    className="rounded-full border border-gray-100 shadow"
-                    unoptimized
-                  />
-                  <div className="ml-4">
-                    <h3 className="text-xl font-semibold text-black group-hover:text-white transition-colors duration-300">
-                      {exp.name}
-                    </h3>
-                    <span className="text-md font-medium opacity-80 text-black group-hover:text-gray-50 transition-colors duration-300">
+        <div className="space-y-12">
+          {experiences.map((exp, index) => {
+            const isEven = index % 2 === 0;
+            return (
+              <div key={index} className={`relative flex flex-col lg:flex-row items-center ${isEven ? 'lg:flex-row-reverse' : ''}`}>
+                
+                {/* --- Timeline Dot/Icon --- */}
+                <div className="absolute left-8 lg:left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full border-2 border-orange-500/50 bg-black flex items-center justify-center z-10 shadow-[0_0_15px_rgba(249,115,22,0.3)]">
+                  <svg 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    width="20" 
+                    height="20" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    strokeWidth="2" 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    className="text-orange-500"
+                  >
+                    <rect width="20" height="14" x="2" y="7" rx="2" ry="2" />
+                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                  </svg>
+                </div>
+
+                {/* --- Spacer (for layout balance) --- */}
+                <div className="hidden lg:block w-1/2" />
+
+                {/* --- Card Content --- */}
+                <div className="w-full lg:w-1/2 pl-20 lg:pl-0 lg:px-12">
+                  <div className="bg-[#0A0A0A] border border-neutral-800 p-8 rounded-2xl hover:border-neutral-700 transition-colors duration-300">
+                    
+                    {/* Date Badge */}
+                    <div className="inline-flex items-center gap-2 bg-orange-950/30 border border-orange-900/50 rounded-full px-4 py-1.5 mb-6">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-orange-500">
+                        <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
+                        <line x1="16" y1="2" x2="16" y2="6" />
+                        <line x1="8" y1="2" x2="8" y2="6" />
+                        <line x1="3" y1="10" x2="21" y2="10" />
+                      </svg>
+                      <span className="text-sm font-semibold text-orange-500">
+                        {exp.date}
+                      </span>
+                    </div>
+
+                    {/* Role & Company */}
+                    <h3 className="text-2xl font-bold text-white mb-2">
                       {exp.role}
-                    </span>
+                    </h3>
+                    <div className="text-lg text-orange-500 font-medium mb-1">
+                      {exp.company}
+                    </div>
+                    
+                    {/* Location */}
+                    <div className="flex items-center gap-2 text-neutral-500 text-sm mb-6">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                        <circle cx="12" cy="10" r="3" />
+                      </svg>
+                      {exp.location}
+                    </div>
+
+                    {/* Description */}
+                    <p className="text-neutral-400 mb-6 leading-relaxed">
+                      {exp.description}
+                    </p>
+
+                    {/* Bullet Points */}
+                    <ul className="space-y-3">
+                      {exp.highlights.map((highlight, i) => (
+                        <li key={i} className="flex items-start gap-3 text-neutral-300 text-sm">
+                          <span className="mt-1.5 min-w-[6px] min-h-[6px] rounded-full bg-orange-500" />
+                          <span className="leading-relaxed">{highlight}</span>
+                        </li>
+                      ))}
+                    </ul>
+
                   </div>
                 </div>
-                <div className="mt-auto mb-4 text-sm font-bold opacity-60 text-black group-hover:text-gray-50 transition-colors duration-300">
-                  {exp.date}
-                </div>
-                <button
-                  className="bg-green-900 text-white rounded-full py-2 px-5 mt-auto font-semibold w-fit hover:bg-green-700 transition"
-                  onClick={() => setActiveIdx(idx)}
-                >
-                  Learn More
-                </button>
+
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
-
-      {/* Modal Window */}
-      {activeIdx !== null && (
-        <div
-          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50"
-          style={{ backdropFilter: 'blur(2px)' }}
-        >
-          <div className="bg-white text-green-900 p-8 rounded-3xl shadow-2xl max-w-md w-full relative animate-fadein">
-            <button
-              className="absolute top-2 right-4 text-3xl text-gray-400 hover:text-gray-900"
-              onClick={() => setActiveIdx(null)}
-              aria-label="Close"
-            >
-              ×
-            </button>
-            <div className="flex items-center mb-4">
-              <Image
-                src={experiences[activeIdx].logo}
-                alt={`${experiences[activeIdx].name} logo`}
-                width={40}
-                height={40}
-                className="rounded-full border border-gray-100 shadow"
-                unoptimized
-              />
-              <div className="ml-3">
-                <span className="font-bold text-xl">{experiences[activeIdx].name}</span>
-                <div className="font-medium text-black">{experiences[activeIdx].role}</div>
-                <div className="text-sm font-bold opacity-60 text-black">{experiences[activeIdx].date}</div>
-                <a
-                  href={experiences[activeIdx].url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block mt-2 text-green-700 underline font-bold"
-                >
-                  Visit Website
-                </a>
-              </div>
-            </div>
-            <h4 className="text-lg font-bold mb-2">Experience Details</h4>
-            <ul className="list-disc pl-6 text-base space-y-2">
-              {experiences[activeIdx].description.map((point, i) => (
-                <li key={i}>{point}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      )}
-
-      {/* Styles for modal animation */}
-      <style jsx>{`
-        @keyframes fadein {
-          from { opacity: 0; transform: translateY(40px);}
-          to { opacity: 1; transform: translateY(0);}
-        }
-        .animate-fadein {
-          animation: fadein 0.3s ease;
-        }
-      `}</style>
     </section>
   );
 }

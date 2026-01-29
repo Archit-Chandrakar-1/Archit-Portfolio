@@ -1,116 +1,194 @@
 "use client";
 
-import { useState } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { ArrowDown, Sparkles, Github, Linkedin, Twitter, Mail } from 'lucide-react';
+import CelestialBody from './CelestialBody';
+import { useTheme } from '@/app/context/ThemeContext';
 
-export default function HeroSection() {
-  const [isDark, setIsDark] = useState(true);
+// Mock Data (Replace with your actual import)
+const personalData = {
+  name: "Archit Chandrakar",
+  role: "AI Product Manager",
+  previousRole: "Lead Software Developer",
+  tagline: "From Code to Product Vision",
+};
 
-  // Theme-based Tailwind classes
-  const bgClass = isDark ? "bg-black" : "bg-white";
-  const textClass = isDark ? "text-white" : "text-black";
-  const subTextClass = isDark ? "text-gray-400" : "text-gray-700";
-  const borderClass = isDark ? "border-gray-600" : "border-gray-300";
-  const indicatorBg = isDark ? "bg-green-400" : "bg-green-600";
+const HeroSection = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { isDark } = useTheme();
+
+  // --- Star Animation Logic ---
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let animationId: number;
+    let stars: { x: number; y: number; radius: number; opacity: number; twinkleSpeed: number }[] = [];
+
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      initStars();
+    };
+
+    const initStars = () => {
+      stars = [];
+      const starCount = Math.floor((canvas.width * canvas.height) / 6000);
+      for (let i = 0; i < starCount; i++) {
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          radius: Math.random() * 1.8,
+          opacity: Math.random(),
+          twinkleSpeed: 0.003 + Math.random() * 0.008
+        });
+      }
+    };
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Only draw stars in Dark Mode
+      if (isDark) {
+        stars.forEach((star) => {
+          star.opacity += star.twinkleSpeed;
+          if (star.opacity > 1 || star.opacity < 0.1) {
+            star.twinkleSpeed = -star.twinkleSpeed;
+          }
+          ctx.beginPath();
+          ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity * 0.8})`;
+          ctx.fill();
+        });
+      }
+      animationId = requestAnimationFrame(animate);
+    };
+
+    resizeCanvas();
+    animate();
+    window.addEventListener('resize', resizeCanvas);
+
+    return () => {
+      window.removeEventListener('resize', resizeCanvas);
+      cancelAnimationFrame(animationId);
+    };
+  }, [isDark]);
+
+  const scrollToProjects = () => {
+    document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
-    <section className={`min-h-screen ${bgClass} ${textClass} relative overflow-hidden transition-colors duration-500`}>
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-10 pointer-events-none z-0">
-        <div className="absolute top-20 left-10 w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-        <div className="absolute top-40 right-20 w-3 h-3 bg-green-400 rounded-full animate-pulse delay-1000"></div>
-        <div className="absolute bottom-32 left-1/4 w-1 h-1 bg-green-400 rounded-full animate-pulse delay-500"></div>
-        <div className="absolute bottom-20 right-1/3 w-2 h-2 bg-green-400 rounded-full animate-pulse delay-700"></div>
-      </div>
+    <section className={`relative min-h-screen overflow-hidden flex items-center transition-colors duration-1000 ${
+      isDark ? 'bg-[#050508]' : 'bg-white'
+    }`}>
+      
+      {/* 1. Star Canvas (Background) */}
+      <canvas
+        ref={canvasRef}
+        className={`absolute inset-0 z-0 transition-opacity duration-1000 ${
+          isDark ? 'opacity-100' : 'opacity-0'
+        }`}
+      />
 
-      <div className="relative z-10 flex items-center min-h-screen">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left Content */}
-            <div className="space-y-8">
-              {/* Logo */}
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                  <span className={`${textClass} text-sm font-bold`}>★</span>
-                </div>
-              </div>
+      {/* 2. Celestial Body (Sun/Moon) - Positioned Right */}
+      <CelestialBody />
 
-              {/* Main Heading and paragraph */}
-              <div className="space-y-4">
-                {/* Applying text-stroke for an outlined effect.
-                  This will require custom CSS in your global stylesheet or inline style.
-                  For a quick demonstration, I'm using inline style and a fallback font.
-                  The background color of the section should be considered when setting stroke color.
-                */}
-                <h1 className="text-6xl lg:text-8xl font-black tracking-wider leading-none"
-                    style={{
-                        WebkitTextStroke: isDark ? '2px white' : '2px black', // Outline color based on theme
-                        WebkitTextFillColor: 'transparent', // Make the text fill transparent
-                        // Fallback font that is heavy and blocky for the outline effect
-                        fontFamily: 'Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif', 
-                    }}
-                >
-                  ARCHIT
-                  <br />
-                  CHANDRAKAR
-                </h1>
-                <p className={`text-lg ${subTextClass} max-w-md`}>
-                  Hello, my name is Archit Chandrakar, nice to meet you I would like to welcome you with my personal portfolio.
-                </p>
-              </div>
+      {/* 3. Dark Mode Background Effects (Nebula) */}
+      <div className={`absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-purple-900/10 via-transparent to-transparent z-0 transition-opacity duration-1000 ${
+        isDark ? 'opacity-100' : 'opacity-0'
+      }`} />
+      
+      {/* 4. Light Mode Background Effects (Soft Blurs) */}
+      <div className={`absolute top-20 left-10 w-72 h-72 rounded-full bg-amber-100/30 blur-3xl transition-opacity duration-1000 ${
+        isDark ? 'opacity-0' : 'opacity-100'
+      }`} />
 
-              {/* Theme Toggle: Clickable scroll indicator */}
-              <div className="flex items-center space-x-2 pt-8">
-                <button
-                  className={`w-6 h-10 border-2 ${borderClass} rounded-full flex justify-center items-start focus:outline-none transition-colors duration-500`}
-                  onClick={() => setIsDark(v => !v)}
-                  aria-label="Toggle theme"
-                  title={isDark ? "Switch to Light Theme" : "Switch to Dark Theme"}
-                >
-                  <div className={`w-1 h-3 ${indicatorBg} rounded-full mt-2 animate-bounce`}></div>
-                </button>
-              </div>
+      {/* 5. Main Content - Positioned LEFT */}
+      <div className="relative z-20 w-full max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="max-w-3xl text-left">
+          <div className="space-y-8">
+            
+            {/* Role Badge */}
+            <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border backdrop-blur-sm transition-all duration-700 ${
+              isDark 
+                ? 'border-white/10 bg-white/5' 
+                : 'border-black/10 bg-black/5'
+            }`}>
+              <Sparkles size={14} className={isDark ? 'text-amber-400' : 'text-amber-500'} />
+              <span className={`text-sm font-medium tracking-wide transition-colors duration-700 ${
+                isDark ? 'text-white/70' : 'text-black/60'
+              }`}>
+                {personalData.previousRole} <span className="mx-2">→</span> {personalData.role}
+              </span>
             </div>
 
-            {/* Right Content - Video */}
-            <div className="relative">
-              <div className="relative aspect-video rounded-2xl overflow-hidden bg-gray-900">
-                <video
-                  className="w-full h-full object-cover"
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                >
-                  <source 
-                    src="https://res.cloudinary.com/daozx86oq/video/upload/v1753615743/Archit-portfolio-video_whmd18.mp4" 
-                    type="video/mp4" 
-                  />
-                  Your browser does not support the video tag.
-                </video>
-                <div className="aspect-video rounded-2xl relative overflow-hidden bg-gray-900">
-                  <video
-                    className="w-full h-full object-cover rounded-2xl"
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                  >
-                    <source 
-                      src="https://res.cloudinary.com/daozx86oq/video/upload/v1753615743/Archit-portfolio-video_whmd18.mp4" 
-                      type="video/mp4" 
-                    />
-                    Your browser does not support the video tag.
-                  </video>
-                  {/* Decorative overlay elements */}
-                  <div className="absolute top-4 right-4 w-4 h-4 bg-green-400 rounded-full opacity-80"></div>
-                  <div className="absolute bottom-6 left-6 w-6 h-6 border-2 border-green-400 rounded-full opacity-80"></div>
-                </div>
-              </div>
+            {/* Name Headline */}
+            <h1 className="text-6xl md:text-7xl lg:text-9xl font-bold tracking-tighter leading-none transition-colors duration-700">
+              <span className={`block ${isDark ? 'text-white' : 'text-black'}`}>
+                ARCHIT
+              </span>
+              <span className={`block ${isDark ? 'text-neutral-500' : 'text-neutral-300'}`}>
+                CHANDRAKAR
+              </span>
+            </h1>
+
+            {/* Tagline */}
+            <p className={`text-xl md:text-2xl font-light tracking-wide max-w-lg transition-colors duration-700 ${
+              isDark ? 'text-neutral-400' : 'text-neutral-500'
+            }`}>
+              {personalData.tagline}
+            </p>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row items-center gap-4 pt-6">
+              <button
+                onClick={scrollToProjects}
+                className="px-8 py-4 bg-[#dc2626] text-white font-medium rounded-full hover:bg-[#b91c1c] transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(220,38,38,0.4)]"
+              >
+                View My Work
+              </button>
+              <a
+                href="#about"
+                className={`px-8 py-4 border font-medium rounded-full transition-all duration-300 ${
+                  isDark 
+                    ? 'border-white/20 text-white hover:border-white hover:bg-white/5' 
+                    : 'border-black/20 text-black hover:border-black hover:bg-black/5'
+                }`}
+              >
+                Learn More
+              </a>
+            </div>
+
+            {/* Social Icons Row */}
+            <div className="flex gap-6 pt-8">
+                {[Github, Linkedin, Twitter, Mail].map((Icon, i) => (
+                    <a key={i} href="#" className={`p-3 rounded-full border transition-all duration-300 ${
+                        isDark 
+                        ? 'border-white/10 text-neutral-400 hover:text-white hover:border-white hover:bg-white/5' 
+                        : 'border-black/10 text-neutral-500 hover:text-black hover:border-black hover:bg-black/5'
+                    }`}>
+                        <Icon size={20} />
+                    </a>
+                ))}
             </div>
 
           </div>
         </div>
       </div>
+
+      {/* Bottom Fade Gradient */}
+      <div className={`absolute bottom-0 left-0 right-0 h-32 z-10 pointer-events-none transition-colors duration-1000 ${
+        isDark 
+          ? 'bg-gradient-to-t from-[#050508] to-transparent' 
+          : 'bg-gradient-to-t from-white to-transparent'
+      }`} />
+      
     </section>
   );
-}
+};
+
+export default HeroSection;

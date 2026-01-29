@@ -1,56 +1,101 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import { Menu, X } from 'lucide-react'; // Ensure lucide-react is installed
 
 export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Handle scroll effect for background transparency
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const navLinks = [
+    { name: "About", href: "#about" },
+    { name: "Services", href: "#services" },
+    { name: "Projects", href: "#projects" },
+    { name: "Certifications", href: "#certifications" },
+    { name: "Blog", href: "#blog" },
+  ];
+
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-sm border-b border-gray-800">
+    <nav 
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled ? "bg-black/80 backdrop-blur-md border-b border-neutral-800 py-4" : "bg-transparent py-6"
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <div className="flex items-center">
-            <div className="flex items-center space-x-1">
-              <div className="relative">
-                <div className="w-8 h-8 bg-green-500 transform rotate-45 rounded-sm"></div>
-                <div className="absolute top-1 left-1 w-6 h-6 bg-white transform rotate-45 rounded-sm"></div>
-              </div>
-            </div>
+        <div className="flex items-center justify-between">
+          
+          {/* --- LEFT: Logo --- */}
+          <Link href="/" className="flex items-center gap-2 group">
+            <span className="text-2xl font-bold text-white tracking-tight group-hover:text-gray-300 transition-colors">
+              AC
+            </span>
+          </Link>
+
+          {/* --- CENTER: Desktop Navigation --- */}
+          <div className="hidden md:flex items-center gap-8">
+            {navLinks.map((link) => (
+              <Link 
+                key={link.name}
+                href={link.href} 
+                className="text-neutral-400 hover:text-white text-sm font-medium transition-colors duration-200"
+              >
+                {link.name}
+              </Link>
+            ))}
           </div>
 
-          {/* Navigation Links */}
-          <div className="hidden md:flex items-center space-x-8">
-            <Link href="/" className="text-white hover:text-green-400 transition-colors font-medium">
-              Home
-            </Link>
-            <Link href="/service" className="text-gray-300 hover:text-green-400 transition-colors font-medium">
-              Service
-            </Link>
-            <Link href="/portfolio" className="text-gray-300 hover:text-green-400 transition-colors font-medium">
-              Projects
-            </Link>
-            <Link href="/blog" className="text-gray-300 hover:text-green-400 transition-colors font-medium">
-              Blog
-            </Link>
-            <Link href="/experience" className="text-gray-300 hover:text-green-400 transition-colors font-medium" target="_blank" rel="noopener noreferrer">
-            Experience
-            </Link>
-            <Link href="/portfolioAdmin" className="text-gray-300 hover:text-green-400 transition-colors font-medium" target="_blank" rel="noopener noreferrer">
-            Admin Login
+          {/* --- RIGHT: CTA Button --- */}
+          <div className="hidden md:flex items-center">
+            <Link href="#contact">
+              <button className="px-6 py-2 rounded-full border border-red-500/50 text-red-500 font-medium text-sm hover:bg-red-600 hover:text-white hover:border-red-600 transition-all duration-300 shadow-[0_0_15px_rgba(239,68,68,0.1)] hover:shadow-[0_0_20px_rgba(239,68,68,0.4)]">
+                Let's Connect
+              </button>
             </Link>
           </div>
 
-          {/* Get in Touch Button */}
-          <a href="#contact-form" className="ml-auto">
-            <Button 
-              variant="outline" 
-              className="border-white text-white hover:bg-white hover:text-black transition-all duration-300"
+          {/* --- MOBILE: Hamburger Menu --- */}
+          <div className="md:hidden">
+            <button 
+              onClick={() => setIsOpen(!isOpen)} 
+              className="text-white p-2"
+              aria-label="Toggle menu"
             >
-              Get in Touch
-            </Button>
-          </a>
+              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
       </div>
+
+      {/* --- Mobile Menu Overlay --- */}
+      {isOpen && (
+        <div className="md:hidden absolute top-full left-0 w-full bg-black border-b border-neutral-800 p-6 flex flex-col gap-4 shadow-2xl animate-in slide-in-from-top-5">
+          {navLinks.map((link) => (
+            <Link 
+              key={link.name}
+              href={link.href}
+              onClick={() => setIsOpen(false)}
+              className="text-neutral-400 hover:text-white text-lg font-medium py-2 border-b border-neutral-900"
+            >
+              {link.name}
+            </Link>
+          ))}
+          <Link href="#contact" onClick={() => setIsOpen(false)}>
+            <button className="w-full mt-4 px-6 py-3 rounded-full bg-red-600 text-white font-bold hover:bg-red-700 transition-colors">
+              Let's Connect
+            </button>
+          </Link>
+        </div>
+      )}
     </nav>
   );
 }
