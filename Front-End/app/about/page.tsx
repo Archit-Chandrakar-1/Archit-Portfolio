@@ -1,8 +1,21 @@
 import React from "react";
-import { MapPin, Mail, Linkedin, Github, Twitter } from "lucide-react"; // Ensure lucide-react is installed
+import { MapPin, Mail, Linkedin, Twitter } from "lucide-react";
+import { SiGithub, SiWhatsapp, SiInstagram } from "react-icons/si";
+
+const socialLinks = [
+  { Icon: Linkedin, href: "https://www.linkedin.com/in/archit-chandrakar-39154a1b0/", label: "LinkedIn" },
+  { Icon: SiGithub, href: "https://github.com/Archit-Chandrakar-1", label: "GitHub" },
+  { Icon: Twitter, href: "https://x.com/ArchitChan86131", label: "X (Twitter)" },
+  { Icon: SiInstagram, href: "https://www.instagram.com/archit.chandrakar/", label: "Instagram" },
+  { Icon: Mail, href: "mailto:archit1chandrakar@gmail.com", label: "Email" },
+  { Icon: SiWhatsapp, href: "https://wa.me/919171311131", label: "WhatsApp" },
+];
+
 
 export default function AboutMe() {
   return (
+    <>
+    
     <section className="bg-white min-h-screen flex items-center py-20 px-6 lg:px-8 overflow-hidden">
       <div className="max-w-7xl mx-auto w-full">
         
@@ -53,19 +66,13 @@ export default function AboutMe() {
             {/* Social Links */}
             <div className="flex items-center gap-8">
               <span className="text-gray-400 font-medium">Connect with me:</span>
-              <div className="flex gap-6">
-                <a href="#" className="flex items-center gap-2 text-gray-600 hover:text-black transition-colors font-medium">
-                  <Linkedin className="w-5 h-5" />
-                  LinkedIn
-                </a>
-                <a href="#" className="flex items-center gap-2 text-gray-600 hover:text-black transition-colors font-medium">
-                  <Github className="w-5 h-5" />
-                  GitHub
-                </a>
-                <a href="#" className="flex items-center gap-2 text-gray-600 hover:text-black transition-colors font-medium">
-                  <Twitter className="w-5 h-5" />
-                  Twitter
-                </a>
+              <div className="flex flex-wrap gap-6">
+                {socialLinks.map(({ Icon, href, label }) => (
+                  <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label} className="flex items-center gap-2 text-gray-600 hover:text-black transition-colors font-medium">
+                    <Icon className="w-5 h-5" />
+                    {label}
+                  </a>
+                ))}
               </div>
             </div>
           </div>
@@ -100,5 +107,7 @@ export default function AboutMe() {
         </div>
       </div>
     </section>
-  );
+    
+  
+    </>);
 }

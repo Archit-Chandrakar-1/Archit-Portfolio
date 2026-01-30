@@ -1,6 +1,7 @@
 import React from "react";
 import { Brain, Code, Sparkles, Lightbulb } from "lucide-react";
 
+
 const expertiseAreas = [
   {
     title: "AI Product Strategy",
@@ -26,6 +27,8 @@ const expertiseAreas = [
 
 export default function ExpertiseSection() {
   return (
+    <>
+    
     <section className="bg-white min-h-screen py-24 px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         
@@ -64,5 +67,7 @@ export default function ExpertiseSection() {
         
       </div>
     </section>
+    
+    </>
   );
 }

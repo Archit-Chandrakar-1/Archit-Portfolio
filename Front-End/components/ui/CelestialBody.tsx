@@ -54,7 +54,7 @@ const CelestialBody = () => {
       <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-12 text-sm font-medium tracking-widest uppercase transition-colors duration-500 ${
         isDark ? 'text-white/30' : 'text-black/30'
       }`}>
-        Click to switch mode
+        {/* Click to switch mode */}
       </div>
     </div>
   );
