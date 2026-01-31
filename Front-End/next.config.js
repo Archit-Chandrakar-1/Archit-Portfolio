@@ -1,10 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
-  eslint: {
-    ignoreDuringBuilds: true,
+  experimental: {
+    serverActions: true,
   },
-  images: { unoptimized: true },
-};
+  images: {
+    domains: ['images.unsplash.com', 'res.cloudinary.com'], // Keeping your image domains
+  },
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig
