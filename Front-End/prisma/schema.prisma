@@ -54,3 +54,12 @@ model Blog {
   readTime  String
   createdAt DateTime @default(now())
 }
+model Certification {
+  id        String   @id @default(uuid())
+  name      String   // e.g. "AWS Solutions Architect"
+  issuer    String   // e.g. "Amazon Web Services"
+  date      String   // e.g. "Dec 2025"
+  link      String?  // Credential URL
+  image     String?  // Issuer Logo URL
+  createdAt DateTime @default(now())
+}
