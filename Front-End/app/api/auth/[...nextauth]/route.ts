@@ -4,19 +4,21 @@ import GoogleProvider from "next-auth/providers/google";
 const handler = NextAuth({
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      clientId: process.env.GOOGLE_CLIENT_ID!,     // <--- Must say process.env
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!, // <--- Must say process.env
     }),
   ],
   callbacks: {
     async signIn({ user }) {
-      // Allow only your email
       if (user.email === "archit1chandrakar@gmail.com") {
         return true;
       }
-      return false; // Block everyone else
+      return false;
     },
   },
+  pages: {
+    error: '/auth/error', 
+  }
 });
 
 export { handler as GET, handler as POST };
