@@ -156,3 +156,42 @@ export async function toggleActiveResume(id: string) {
   revalidatePath("/");
   revalidatePath("/admin/resume");
 }
+
+// ==========================================
+// 5. BLOG ACTIONS
+// ==========================================
+
+export async function createBlogPost(formData: FormData) {
+  const title = formData.get("title") as string;
+  const excerpt = formData.get("excerpt") as string;
+  const category = formData.get("category") as string;
+  const image = formData.get("image") as string;
+  const type = formData.get("type") as string;
+  
+  // Auto-generate slug from title (e.g., "Hello World" -> "hello-world")
+  // Or fallback to a random string if title is missing
+  const rawSlug = title ? title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '') : `post-${Date.now()}`;
+  const slug = `${rawSlug}-${Date.now()}`; // Append timestamp to ensure uniqueness
+
+  await prisma.blogPost.create({
+    data: {
+      title,
+      excerpt,
+      category,
+      image,
+      type,
+      slug,
+      content: "", // Placeholder for now
+    }
+  });
+
+  revalidatePath("/blog");
+  revalidatePath("/admin/blog");
+  redirect("/admin/blog");
+}
+
+export async function deleteBlogPost(id: string) {
+  await prisma.blogPost.delete({ where: { id } });
+  revalidatePath("/blog");
+  revalidatePath("/admin/blog");
+}

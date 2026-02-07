@@ -1,166 +1,144 @@
-"use client";
-
 import React from 'react';
 import Navbar from '@/components/ui/navbar';
-import Footer from '../footer/page';
-import { Calendar, Video, MessageCircle, ArrowRight, Share2, Facebook, Twitter, Linkedin } from 'lucide-react';
+import Footer from '../footer/page'; 
+import { PrismaClient } from "@prisma/client";
+import { ArrowUpRight, Calendar, Tag } from 'lucide-react';
+import Link from 'next/link';
 
-// --- Mock Blog Data ---
-const blogPosts = [
-  {
-    id: 1,
-    day: "15",
-    month: "JAN",
-    year: "2026",
-    title: "The Future of AI in EdTech: Beyond Automation",
-    excerpt: "How Generative AI is reshaping personalized learning paths. We explore the shift from static curriculums to dynamic, AI-driven educational experiences that adapt to every student's pace.",
-    category: "AI Product",
-    image: "https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?q=80&w=800&auto=format&fit=crop",
-    slug: "ai-in-edtech",
-    comments: 24,
-    type: "article"
-  },
-  {
-    id: 2,
-    day: "22",
-    month: "DEC",
-    year: "2025",
-    title: "Migrating Legacy Systems to Modern Stacks",
-    excerpt: "A deep dive case study on migrating the MATS University portal from PHP to React.js. Discover the challenges of data integrity, SEO preservation, and the massive performance wins achieved.",
-    category: "Development",
-    image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=800&auto=format&fit=crop",
-    slug: "migration-case-study",
-    comments: 12,
-    type: "video"
-  },
-  {
-    id: 3,
-    day: "10",
-    month: "NOV",
-    year: "2025",
-    title: "Data-Driven Decisions with RFM Analysis",
-    excerpt: "Using Python to unlock e-commerce growth. We break down Recency, Frequency, and Monetary analysis and how visualzing this data can transform your marketing strategy.",
-    category: "Data Science",
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop",
-    slug: "rfm-analysis",
-    comments: 56,
-    type: "article"
-  }
-];
+const prisma = new PrismaClient();
 
-export default function BlogPage() {
+// This function calculates "Read Time" based on text length (optional utility)
+function estimateReadTime(text: string) {
+  const wordsPerMinute = 200;
+  const words = text.split(/\s+/).length;
+  const minutes = Math.ceil(words / wordsPerMinute);
+  return `${minutes} min read`;
+}
+
+export default async function BlogPage() {
+  // 1. FETCH REAL DATA FROM DB
+  const posts = await prisma.blogPost.findMany({
+    orderBy: { createdAt: 'desc' }, // Newest first
+  });
+
+  // 2. LOGIC: Split into "Hero" (Latest) and "Grid" (The rest)
+  const heroPost = posts[0]; 
+  const gridPosts = posts.slice(1);
+
   return (
-    <main className="min-h-screen bg-white relative overflow-hidden selection:bg-emerald-200 selection:text-emerald-900">
+    <main className="min-h-screen bg-[#F9FAFB] text-slate-900 font-sans selection:bg-indigo-100 selection:text-indigo-900">
       <Navbar />
 
-      {/* === LIQUID BACKGROUND ANIMATION === */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-         {/* Top Right Orb */}
-         <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-emerald-100/60 rounded-full blur-[100px] animate-float-slow"></div>
-         {/* Bottom Left Orb */}
-         <div className="absolute bottom-[10%] left-[-10%] w-[600px] h-[600px] bg-emerald-50/80 rounded-full blur-[120px] animate-pulse-slow"></div>
-         {/* Center Small Orb */}
-         <div className="absolute top-[40%] left-[40%] w-[300px] h-[300px] bg-emerald-200/20 rounded-full blur-[80px]"></div>
-      </div>
-
-      {/* --- Page Header --- */}
-      <section className="relative z-10 pt-40 pb-20 text-center">
-        <h1 className="text-5xl md:text-7xl font-serif font-medium text-emerald-950 tracking-tight mb-4">
-          The Journal
-        </h1>
-        <div className="flex items-center justify-center gap-4">
-            <div className="h-px w-12 bg-emerald-300"></div>
-            <p className="text-emerald-600/80 uppercase tracking-[0.2em] text-sm font-medium">
-                Insights & Reflections
-            </p>
-            <div className="h-px w-12 bg-emerald-300"></div>
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-32 pb-24">
+        
+        {/* === HEADER === */}
+        <div className="max-w-2xl mb-16">
+          <h4 className="text-indigo-600 font-bold tracking-wide uppercase text-sm mb-3">
+            The Journal
+          </h4>
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-slate-900 mb-4">
+            Insights & Updates.
+          </h1>
+          <p className="text-lg text-slate-500 leading-relaxed">
+            Latest thoughts on Product Management, AI, and Engineering.
+          </p>
         </div>
-      </section>
 
-      {/* --- Blog List Section --- */}
-      <section className="relative z-10 pb-32 px-6 lg:px-8 max-w-7xl mx-auto space-y-24">
-        {blogPosts.map((post, index) => (
-          <article 
-            key={post.id} 
-            className={`flex flex-col lg:flex-row gap-12 items-center ${index % 2 !== 0 ? 'lg:flex-row-reverse' : ''}`}
-          >
-            
-            {/* === LEFT: IMAGE COMPOSITION === */}
-            <div className="w-full lg:w-1/2 relative group">
-                {/* The "Color Block" Background (Emerald) */}
-                <div className={`absolute top-8 ${index % 2 !== 0 ? '-right-8' : '-left-8'} w-full h-full bg-emerald-50 rounded-3xl -z-10 transition-transform duration-500 group-hover:scale-[1.02] group-hover:bg-emerald-100`}></div>
-                
-                {/* The "Glass Frame" & Image */}
-                <div className="relative p-3 bg-white/40 backdrop-blur-md border border-white/60 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-transform duration-500 group-hover:-translate-y-2">
-                    <div className="relative overflow-hidden rounded-xl aspect-[4/3]">
-                        <img 
-                            src={post.image} 
-                            alt={post.title} 
-                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                        />
-                        {/* Overlay on hover */}
-                        <div className="absolute inset-0 bg-emerald-900/0 group-hover:bg-emerald-900/10 transition-colors duration-500"></div>
-                    </div>
+        {/* === EMPTY STATE (If no posts exist) === */}
+        {posts.length === 0 && (
+          <div className="py-20 border-2 border-dashed border-slate-200 rounded-3xl text-center">
+            <p className="text-slate-500 text-lg">No posts published yet.</p>
+            <p className="text-slate-400 text-sm">Head to your Admin Dashboard to write one.</p>
+          </div>
+        )}
+
+        {/* === HERO POST (The Latest Entry) === */}
+        {heroPost && (
+          <Link href={`/blog/${heroPost.slug}`} className="group block mb-16">
+            <div className="bg-white border border-slate-200 rounded-3xl overflow-hidden hover:shadow-xl hover:border-indigo-100 transition-all duration-300 grid md:grid-cols-2">
+              
+              {/* Content Side */}
+              <div className="p-8 md:p-12 flex flex-col justify-center order-2 md:order-1">
+                <div className="flex items-center gap-3 mb-6">
+                  <span className="px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold uppercase tracking-wider">
+                    {heroPost.category}
+                  </span>
+                  <span className="flex items-center gap-1 text-slate-400 text-xs font-medium">
+                    <Calendar size={12} /> {new Date(heroPost.createdAt).toLocaleDateString()}
+                  </span>
                 </div>
-            </div>
-
-            {/* === RIGHT: CONTENT === */}
-            <div className="w-full lg:w-1/2 flex flex-col justify-center">
                 
-                {/* Meta Header */}
-                <div className="flex items-center gap-6 mb-6">
-                    {/* Date Block */}
-                    <div className="flex items-baseline gap-2 text-emerald-950">
-                        <span className="text-4xl font-bold">{post.day}</span>
-                        <span className="text-xl font-medium uppercase text-emerald-600">{post.month}</span>
-                    </div>
-
-                    {/* Icons */}
-                    <div className="flex items-center gap-3 text-gray-400 text-sm">
-                        {post.type === 'video' ? <Video size={16} /> : <div className="w-4 h-4 rounded-full bg-emerald-100"></div>}
-                        <div className="flex items-center gap-1">
-                            <MessageCircle size={16} />
-                            <span>{post.comments}</span>
-                        </div>
-                        <span className="px-3 py-1 bg-emerald-50 text-emerald-700 text-xs font-bold uppercase tracking-wider rounded-full">
-                            {post.category}
-                        </span>
-                    </div>
-                </div>
-
-                {/* Title */}
-                <h2 className="text-3xl md:text-4xl font-serif text-gray-900 leading-tight mb-6 hover:text-emerald-700 transition-colors cursor-pointer">
-                    {post.title}
+                <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4 group-hover:text-indigo-600 transition-colors">
+                  {heroPost.title}
                 </h2>
-
-                {/* Excerpt */}
-                <p className="text-gray-500 text-lg leading-relaxed mb-8 font-light">
-                    {post.excerpt}
+                <p className="text-slate-500 text-lg mb-8 line-clamp-3">
+                  {heroPost.excerpt}
                 </p>
 
-                {/* Footer Actions */}
-                <div className="flex items-center justify-between border-t border-emerald-100 pt-8">
-                    
-                    {/* Button */}
-                    <a href={`/blog/${post.slug}`} className="group inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-full font-medium shadow-lg shadow-emerald-200 hover:bg-emerald-700 hover:shadow-emerald-300 transition-all duration-300">
-                        Continue Reading
-                        <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
-                    </a>
-
-                    {/* Social Share */}
-                    <div className="flex items-center gap-4 text-gray-400">
-                        <button className="hover:text-emerald-600 transition-colors"><Facebook size={18} /></button>
-                        <button className="hover:text-emerald-600 transition-colors"><Twitter size={18} /></button>
-                        <button className="hover:text-emerald-600 transition-colors"><Linkedin size={18} /></button>
-                    </div>
+                <div className="flex items-center text-indigo-600 font-semibold text-sm">
+                  Read Article <ArrowUpRight size={16} className="ml-1 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
                 </div>
+              </div>
 
+              {/* Image Side */}
+              <div className="relative h-64 md:h-auto order-1 md:order-2 overflow-hidden bg-slate-100">
+                <img 
+                  src={heroPost.image} 
+                  alt={heroPost.title}
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+              </div>
             </div>
+          </Link>
+        )}
 
-          </article>
-        ))}
-      </section>
+        {/* === STANDARD GRID (Previous Entries) === */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {gridPosts.map((post) => (
+            <Link 
+              key={post.id} 
+              href={`/blog/${post.slug}`} 
+              className="group flex flex-col bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+            >
+              {/* Image Top */}
+              <div className="relative h-48 overflow-hidden bg-slate-100">
+                <img 
+                  src={post.image} 
+                  alt={post.title} 
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute top-4 left-4">
+                  <span className="px-3 py-1 bg-white/90 backdrop-blur-sm border border-black/5 rounded-lg text-xs font-bold text-slate-900 shadow-sm">
+                    {post.category}
+                  </span>
+                </div>
+              </div>
 
+              {/* Content Body */}
+              <div className="p-6 flex flex-col flex-1">
+                <div className="flex items-center gap-2 text-slate-400 text-xs mb-3 font-medium">
+                  <span>{new Date(post.createdAt).toLocaleDateString()}</span>
+                  <span>•</span>
+                  <span>{estimateReadTime(post.excerpt)}</span>
+                </div>
+                
+                <h3 className="text-xl font-bold text-slate-900 mb-3 leading-snug group-hover:text-indigo-600 transition-colors">
+                  {post.title}
+                </h3>
+                
+                <p className="text-slate-500 text-sm leading-relaxed mb-6 line-clamp-2 flex-1">
+                  {post.excerpt}
+                </p>
+
+                <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
+                  <span className="text-xs font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">Read more</span>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+      </div>
       <Footer />
     </main>
   );
