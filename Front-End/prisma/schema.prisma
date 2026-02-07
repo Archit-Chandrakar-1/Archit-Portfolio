@@ -43,17 +43,15 @@ model Experience {
   createdAt   DateTime @default(now())
 }
 
-model Blog {
+
+model Resume {
   id        String   @id @default(uuid())
-  title     String
-  slug      String   @unique
-  excerpt   String
-  content   String   // Markdown/HTML
-  category  String
-  image     String
-  readTime  String
+  name      String
+  url       String
+  isActive  Boolean  @default(false)
   createdAt DateTime @default(now())
 }
+
 model Certification {
   id        String   @id @default(uuid())
   name      String   // e.g. "AWS Solutions Architect"
@@ -61,5 +59,16 @@ model Certification {
   date      String   // e.g. "Dec 2025"
   link      String?  // Credential URL
   image     String?  // Issuer Logo URL
+  createdAt DateTime @default(now())
+}
+model BlogPost {
+  id        String   @id @default(uuid()) // <--- CHANGED THIS LINE
+  title     String
+  excerpt   String
+  content   String?  
+  category  String
+  image     String   
+  slug      String   @unique 
+  type      String   @default("article") 
   createdAt DateTime @default(now())
 }

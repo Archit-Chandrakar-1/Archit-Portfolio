@@ -111,3 +111,48 @@ export async function deleteCertification(id: string) {
   revalidatePath("/");
   revalidatePath("/admin/certifications");
 }
+
+
+// ==========================================
+// 4. RESUME ACTIONS (NEW)
+// ==========================================
+
+export async function createResume(formData: FormData) {
+  const name = formData.get("name") as string;
+  const url = formData.get("url") as string;
+
+  // If this is the FIRST resume ever, make it active by default
+  const count = await prisma.resume.count();
+  const isActive = count === 0;
+
+  await prisma.resume.create({
+    data: { name, url, isActive }
+  });
+
+  revalidatePath("/");
+  revalidatePath("/admin/resume");
+  redirect("/admin/resume");
+}
+
+export async function deleteResume(id: string) {
+  await prisma.resume.delete({ where: { id } });
+  revalidatePath("/");
+  revalidatePath("/admin/resume");
+}
+
+export async function toggleActiveResume(id: string) {
+  // 1. Turn OFF all other resumes
+  await prisma.resume.updateMany({
+    where: { id: { not: id } },
+    data: { isActive: false }
+  });
+
+  // 2. Turn ON the selected resume
+  await prisma.resume.update({
+    where: { id },
+    data: { isActive: true }
+  });
+
+  revalidatePath("/");
+  revalidatePath("/admin/resume");
+}
